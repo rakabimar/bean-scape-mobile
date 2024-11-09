@@ -4,6 +4,7 @@ Rakabima Ghaniendra Rusdianto - 2306228472
 
 ## Bookmarks
 - [Tugas 7](#tugas-7)
+- [Tugas 8](#tugas-8)
 
 ## Tugas 7 <a id="tugas-7"></a>
 1. **Stateless Widget and Stateful Widget**
@@ -43,7 +44,7 @@ Rakabima Ghaniendra Rusdianto - 2306228472
 5. **Explanation of Implementation Steps**
     - Creating a New Flutter Project: Start by running the command `flutter create <APP_NAME>` to create a new project, then navigate into the project directory using `cd <APP_NAME>`.
     - Creating Three Buttons with Icons and Text: Three buttons were created using `ItemHomepage`, each with a unique name, icon, and color:
-    ```
+    ```dart
     final List<ItemHomepage> items = [
     ItemHomepage("Lihat Daftar Produk", Icons.coffee, const Color(0xFF603F26)),
     ItemHomepage("Tambah Produk", Icons.add, const Color(0xFF6C4E31)),
@@ -51,7 +52,7 @@ Rakabima Ghaniendra Rusdianto - 2306228472
     ];
     ```
     - Implementing SnackBar for Each Button: Within each button widget (`ItemCard`), `InkWell` was applied to make the buttons clickable. When tapped (`onTap`), a `SnackBar` message is displayed using `ScaffoldMessenger`, with each button showing a different message according to its function:
-    ```
+    ```dart
     child: InkWell(
         // Aksi ketika kartu ditekan.
         onTap: () {
@@ -65,3 +66,143 @@ Rakabima Ghaniendra Rusdianto - 2306228472
     ```
 
     - Running the Application: After completing the implementation, run the application using the `flutter run` command.
+
+## Tugas 8 <a id="tugas-8"></a>
+1. **Purpose and Benefits of `const` in Flutter**
+    - The `const` keyword in Flutter indicates that a widget or value is immutable and will not change during runtime. Using `const` helps optimize performance by allowing Flutter to reuse the same object in memory instead of creating new instances.
+    - Benefits:
+        * Performance: Widgets marked with `const` are only built once and reused, reducing rebuilds during hot reloads or updates.
+        * Code Clarity: Clearly indicates immutability, making the code easier to reason about.
+        * Memory Efficiency: Avoids multiple identical instances of widgets or values.
+    - When to Use:
+        * Use `const` for widgets or values that are static and do not depend on runtime values, such as:
+        ```dart
+        const Text('Hello World');
+        ```
+        * In constructors where the properties are marked as final and do not change:
+        ```dart
+        const Icon(Icons.star);
+        ```
+    - When Not to Use:
+        * Do not use `const` if the widget depends on dynamic or runtime variables, such as user inputs or state updates.
+2. **Comparison Between Column and Row**
+    - Column:
+        * Arranges widgets vertically (from top to bottom).
+        * Can align children using properties like crossAxisAlignment and mainAxisAlignment.
+        * Suitable for vertical lists or stacking elements.
+        * Example: (`menu.dart`)
+        ```dart
+        ...
+        child: Column(
+                // Menyusun teks dan grid item secara vertikal.
+
+                children: [
+                  // Menampilkan teks sambutan dengan gaya tebal dan ukuran 18.
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'Welcome to beanScape',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+
+                  // Grid untuk menampilkan ItemCard dalam bentuk grid 3 kolom.
+                  GridView.count(
+                    primary: true,
+                    padding: const EdgeInsets.all(20),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 3,
+                    // Agar grid menyesuaikan tinggi kontennya.
+                    shrinkWrap: true,
+
+                    // Menampilkan ItemCard untuk setiap item dalam list items.
+                    children: items.map((ItemHomepage item) {
+                      return ItemCard(item);
+                    }).toList(),
+                  ),
+                ],
+              ),
+        ...
+        ```
+    - Row:
+        * Arranges widgets horizontally (from left to right).
+        * Useful for creating horizontal layouts like buttons in a toolbar.
+        * Example: (`menu.dart`)
+        ```dart
+        ...
+        // Row untuk menampilkan 3 InfoCard secara horizontal.
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoCard(title: 'NPM', content: npm),
+                InfoCard(title: 'Name', content: name),
+                InfoCard(title: 'Class', content: className),
+              ],
+            ),
+        ...
+        ```
+3. **Form Input Elements in the Code**
+    - Used Elements:
+        * **`TextFormField`**: For inputs like name, price, description, amount, and bitterness.
+        * **`DropdownButtonFormField`**: For selecting a category.
+        * **`ElevatedButton`**: For the save action.
+    - Unused Elements:
+        * Widgets like `Switch`, `Checkbox`, or `RadioButton` are not used in the current form but can be helpful in specific use cases. For instance, Switch could be used to toggle between options like "In Stock" or "Out of Stock".
+
+4. Managing Themes in Flutter
+    - To ensure consistency in the app's look and feel, themes are managed using the `ThemeData` class. This allows you to define global styles for text, colors, buttons, etc.
+    - Implementation: (`main.dart`)
+    ```dart
+    ...
+    MaterialApp(
+        theme: ThemeData(
+            primaryColor: Colors.brown,
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.brown),
+            textTheme: TextTheme(
+            bodyText1: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+        ),
+    );
+    ...
+    ```
+    - Theme in the Code:
+        * The code implements theme colors for `AppBar` and buttons using `Theme.of(context).colorScheme.primary`.
+
+5. **Handling Navigation in Flutter with Push, Pop, and PushReplacement**
+
+   - **`Navigator.push`**:
+     - Adds a new route (page) to the navigation stack.
+     - The new page is displayed on top of the current page.
+     - **Example**:
+       ```dart
+       Navigator.push(
+         context,
+         MaterialPageRoute(builder: (context) => ProductEntryFormPage()),
+       );
+       ```
+     - Use this when navigating to a new screen while keeping the current screen in the stack (e.g., opening a details page).
+
+   - **`Navigator.pop`**:
+     - Removes the current route (page) from the navigation stack and returns to the previous route.
+     - Typically used when navigating back.
+     - **Example**:
+       ```dart
+       Navigator.pop(context);
+       ```
+     - Use this to close a page and return to the one underneath (e.g., closing a form page to return to the home page).
+
+   - **`Navigator.pushReplacement`**:
+     - Replaces the current route with a new one, removing the current route from the stack.
+     - No option to return to the previous route as it is removed.
+     - **Example**:
+       ```dart
+       Navigator.pushReplacement(
+         context,
+         MaterialPageRoute(builder: (context) => HomePage()),
+       );
+       ```
+     - Use this when the user shouldn't return to the previous page (e.g., replacing a login screen with the home page after successful authentication).
