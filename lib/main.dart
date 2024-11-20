@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
               ).copyWith(secondary: Colors.brown[200]),
           useMaterial3: true,
         ),
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }
